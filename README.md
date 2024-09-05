@@ -78,7 +78,5 @@ After clicking the Play button, start the `python a1_joint_move_sin.py` script. 
 
 With this, the Isaac Sim A1 robot arm simulation process is complete. You may play the demo in the system with the code provided, like shown below.
 
-<video width="320" height="240" controls>
-  <source src="assets/a1_asaacsim_demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![video_git](assets/a1_asaacsim_demo.gif)
+
