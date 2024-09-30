@@ -72,7 +72,7 @@ The following is the official tutorial to help you understand the basic Isaac Si
 
 ## Demonstration Example
 
-After clicking the Play button, start the `python a1_joint_move_sin.py` script. A1 robot arm will begin executing a sinusoidal trajectory in joint space, as shown in the image below.
+After clicking the Play button, start the `python a1_joint_move_sin.py` script. A1 robot arm will begin executing a sinusoidal trajectory in joint space, as shown in the image below. You can also play the controller trajectory by running `python a1_control_from_traj.py`. This will play the trajectory based on the given `joint_trajectory.npz` data.
 
 ![launcher3_en](assets/launcher3_en.jpg)
 
@@ -120,7 +120,7 @@ cd release/install
 source setup.bash
 roslaunch mobiman eeTrackerdemo.launch
 
-##Initiate one terminal,e.g. "terminal_3", run the script.
+##Initiate another terminal,e.g. "terminal_3", run the script.
 python mpc_picker.py
 ```
 

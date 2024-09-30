@@ -11,9 +11,9 @@ from geometry_msgs.msg import PoseStamped
 
 class A1_wrapper():
     def __init__(self):
-        rospy.init_node('position_command_syncer')
+        rospy.init_node('mpc_picker', anonymous=True)
         self.pub_js = rospy.Publisher('/isaac_sim/joint_command', JointState, queue_size=10)
-        self.pub_mpc = rospy.Publisher('/a1_mpc_target', PoseStamped, queue_size=10)
+        self.pub_mpc = rospy.Publisher('/a1_ee_target', PoseStamped, queue_size=10)
         self.command_js = JointState()
         self.init_command_js()
         self.mpc_target = PoseStamped()
@@ -27,7 +27,7 @@ class A1_wrapper():
         self.command_js.position = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05]
         self.command_js.velocity = []
 
-    def set_mpc_target(self,x=1,y=0,z=0, x1 = 0, y1 = 0, z1 = 0, w1 = 1):
+    def set_mpc_target(self,x=1,y=0,z=0, x1 = 1, y1 = 0, z1 = 0, w1 = 0):
         self.mpc_target.header.frame_id = ""
         self.mpc_target.pose.orientation.x = x1
         self.mpc_target.pose.orientation.y = y1
@@ -50,13 +50,13 @@ class A1_wrapper():
     def close_gripper(self):
         self.command_js.position[-2] = 0.015
         self.command_js.position[-1] = 0.015
-        rospy.sleep(0.5)
+        rospy.sleep(1)
 
     def open_gripper(self):
         self.command_js.position[-2] = 0.05
         self.command_js.position[-1] = 0.05
         self.pub_js.publish(self.command_js)
-        rospy.sleep(0.5)
+        rospy.sleep(1)
 
     def pub_mpc_command(self, command_js):
         self.pub.publish(command_js)
@@ -64,13 +64,14 @@ class A1_wrapper():
 
 if __name__ == '__main__':
     controller_a1 = A1_wrapper()
+    pick_height = 0.18
     waypoints = [
                 # [0.12,0,0.5],
                 [0.3,0,0.5],
-                [0.3,0,0.1],
+                [0.3,0,pick_height],
                 [0.4,0,0.5],
                 [0,-0.4,0.3],
-                [0,-0.4,0.1],
+                [0,-0.4,pick_height],
                 [0,-0.4,0.3],
                 ]
     controller_a1.open_gripper()
@@ -79,10 +80,10 @@ if __name__ == '__main__':
         print(f"start move to target:{waypoint_i}") 
         duration = 5
         controller_a1.pub_mpc_target(duration)
-        if waypoint_i[0] == 0.3 and waypoint_i[1] == 0 and waypoint_i[2] == 0.1:
+        if waypoint_i[0] == 0.3 and waypoint_i[1] == 0 and waypoint_i[2] == pick_height:
             controller_a1.close_gripper()
             print("start close gripper")
-        if waypoint_i[0] == 0 and waypoint_i[1] == -0.4 and waypoint_i[2] == 0.1:
+        if waypoint_i[0] == 0 and waypoint_i[1] == -0.4 and waypoint_i[2] == pick_height:
             controller_a1.open_gripper()
             print("start open gripper")
         
