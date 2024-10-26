@@ -17,8 +17,9 @@ class A1_wrapper():
         msg_sync = JointState()
         msg_sync.header = msg.header
         msg_sync.name = ['arm_joint1', 'arm_joint2', 'arm_joint3', 'arm_joint4', 'arm_joint5', 'arm_joint6']
-        msg_sync.position = [i for i in msg.position] 
+        msg_sync.position = [i for i in msg.position[0:6]] 
         self.pub.publish(msg_sync)
+        print(msg_sync.position)
 if __name__ == '__main__':
     A1_wrapper()
     rospy.spin()
